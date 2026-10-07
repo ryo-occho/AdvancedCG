@@ -3,13 +3,14 @@
 in vec2 outTexCoord;
 out vec4 fragColor;
 
-// TODO: uncomment these lines
-//uniform vec4 checkerColor0;
-//uniform vec4 checkerColor1;
-//uniform vec2 checkerScale;
+uniform vec4 checkerColor0;
+uniform vec4 checkerColor1;
+uniform vec2 checkerScale;
 
 void main()
 {
-	// TODO: write an appropriate code here
-	fragColor = vec4(0, 1, 0, 1);
+	vec2 checkerCoord = fract(outTexCoord / checkerScale);
+	bool sameHalf = (checkerCoord.s <= 0.5 && checkerCoord.t <= 0.5)
+		|| (checkerCoord.s > 0.5 && checkerCoord.t > 0.5);
+	fragColor = sameHalf ? checkerColor0 : checkerColor1;
 }

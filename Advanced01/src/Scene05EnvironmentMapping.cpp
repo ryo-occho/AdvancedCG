@@ -159,9 +159,8 @@ void Scene05EnvironmentMapping::Draw()
 
 	s_pShader->use();
 	s_pShader->sendUniformMatrix4fv("projModelViewMatrix", glm::value_ptr(projModelViewMatrix));
-	// TODO: uncomment these lines
-	//s_pShader->sendUniform3fv("eye", glm::value_ptr(eye));
-	//s_pShader->sendUniform1ui("envmap", 0);
+	s_pShader->sendUniform3fv("eye", glm::value_ptr(eye));
+	s_pShader->sendUniform1i("envmap", 0);
 
 	glBindVertexArray(s_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 3 * s_TriMesh.getNumTriangles());

@@ -3,14 +3,35 @@
 in vec2 outTexCoord;
 out vec4 fragColor;
 
-// TODO: uncomment these lines
-//uniform sampler2D tex;
-//uniform int halfKernelSize;
-//uniform float uScale;
-//uniform float vScale;
+uniform sampler2D tex;
+uniform int halfKernelSize;
+uniform float uScale;
+uniform float vScale;
 
 void main()
 {
-	// TODO: write an appropriate code here
-	fragColor = vec4(0, 1, 0, 1);
+	if (halfKernelSize == 0)
+	{
+		fragColor = texture2D(tex, outTexCoord);
+		return;
+	}
+
+	vec4 colorSum = vec4(0.0);
+	float weightSum = 0.0;
+	float kernelRadius = float(halfKernelSize);
+
+	for (int y = -halfKernelSize; y <= halfKernelSize; ++y)
+	{
+		for (int x = -halfKernelSize; x <= halfKernelSize; ++x)
+		{
+			vec2 normalizedOffset = vec2(float(x), float(y)) / kernelRadius;
+			float weight = exp(-dot(normalizedOffset, normalizedOffset) / (0.5 * 0.5));
+			vec2 texelOffset = vec2(float(x) * uScale, float(y) * vScale);
+
+			colorSum += texture2D(tex, outTexCoord + texelOffset) * weight;
+			weightSum += weight;
+		}
+	}
+
+	fragColor = colorSum / weightSum;
 }

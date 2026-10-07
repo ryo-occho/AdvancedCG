@@ -2,12 +2,15 @@
 
 in vec4 vertexPosition;
 
-// TODO: uncomment these lines
-//uniform float temporalSignal;
+uniform float temporalSignal;
 uniform mat4 projModelViewMatrix;
 
 void main()
 {
-	// TODO: write an appropriate code here
-	gl_Position = projModelViewMatrix * vertexPosition;
+	vec4 animatedPosition = vertexPosition;
+	float waveX = sin(vertexPosition.x * 1.5 + temporalSignal * 5.0);
+	float waveZ = cos(vertexPosition.z * 1.5 + temporalSignal * 4.0);
+	animatedPosition.y = 0.25 * (waveX + waveZ);
+
+	gl_Position = projModelViewMatrix * animatedPosition;
 }
